@@ -1,0 +1,819 @@
+exchange: NSE
+
+
+providers:
+  yfinance:
+    symbols:
+      - 360ONE.NS
+      - 3MINDIA.NS
+      - ABB.NS
+      - ACC.NS
+      - AIAENG.NS
+      - APLAPOLLO.NS
+      - AUBANK.NS
+      - AADHARHFC.NS
+      - AARTIIND.NS
+      - AAVAS.NS
+      - ABBOTINDIA.NS
+      - ACE.NS
+      - ADANIENSOL.NS
+      - ADANIENT.NS
+      - ADANIGREEN.NS
+      - ADANIPORTS.NS
+      - ADANIPOWER.NS
+      - ATGL.NS
+      - AWL.NS
+      - ABCAPITAL.NS
+      - ABFRL.NS
+      - ABREL.NS
+      - ABSLAMC.NS
+      - AEGISLOG.NS
+      - AFFLE.NS
+      - AJANTPHARM.NS
+      - AKUMS.NS
+      - APLLTD.NS
+      - ALKEM.NS
+      - ALKYLAMINE.NS
+      - ALOKINDS.NS
+      - ARE&M.NS
+      - AMBER.NS
+      - AMBUJACEM.NS
+      - ANANDRATHI.NS
+      - ANANTRAJ.NS
+      - ANGELONE.NS
+      - APARINDS.NS
+      - APOLLOHOSP.NS
+      - APOLLOTYRE.NS
+      - APTUS.NS
+      - ACI.NS
+      - ASAHIINDIA.NS
+      - ASHOKLEY.NS
+      - ASIANPAINT.NS
+      - ASTERDM.NS
+      - ASTRAZEN.NS
+      - ASTRAL.NS
+      - ATUL.NS
+      - AUROPHARMA.NS
+      - AVANTIFEED.NS
+      - DMART.NS
+      - AXISBANK.NS
+      - BASF.NS
+      - BEML.NS
+      - BLS.NS
+      - BSE.NS
+      - BAJAJ-AUTO.NS
+      - BAJFINANCE.NS
+      - BAJAJFINSV.NS
+      - BAJAJHLDNG.NS
+      - BALAMINES.NS
+      - BALKRISIND.NS
+      - BALRAMCHIN.NS
+      - BANDHANBNK.NS
+      - BANKBARODA.NS
+      - BANKINDIA.NS
+      - MAHABANK.NS
+      - BATAINDIA.NS
+      - BAYERCROP.NS
+      - BERGEPAINT.NS
+      - BDL.NS
+      - BEL.NS
+      - BHARATFORG.NS
+      - BHEL.NS
+      - BPCL.NS
+      - BHARTIARTL.NS
+      - BHARTIHEXA.NS
+      - BIKAJI.NS
+      - BIOCON.NS
+      - BIRLACORPN.NS
+      - BSOFT.NS
+      - BLUEDART.NS
+      - BLUESTARCO.NS
+      - BBTC.NS
+      - BOSCHLTD.NS
+      - BRIGADE.NS
+      - BRITANNIA.NS
+      - MAPMYINDIA.NS
+      - CCL.NS
+      - CESC.NS
+      - CGPOWER.NS
+      - CIEINDIA.NS
+      - CRISIL.NS
+      - CAMPUS.NS
+      - CANFINHOME.NS
+      - CANBK.NS
+      - CAPLIPOINT.NS
+      - CGCL.NS
+      - CARBORUNIV.NS
+      - CASTROLIND.NS
+      - CEATLTD.NS
+      - CELLO.NS
+      - CENTRALBK.NS
+      - CDSL.NS
+      - CENTURYPLY.NS
+      - CERA.NS
+      - CHALET.NS
+      - CHAMBLFERT.NS
+      - CHEMPLASTS.NS
+      - CHENNPETRO.NS
+      - CHOLAHLDNG.NS
+      - CHOLAFIN.NS
+      - CIPLA.NS
+      - CUB.NS
+      - CLEAN.NS
+      - COALINDIA.NS
+      - COCHINSHIP.NS
+      - COFORGE.NS
+      - COLPAL.NS
+      - CAMS.NS
+      - CONCORDBIO.NS
+      - CONCOR.NS
+      - COROMANDEL.NS
+      - CRAFTSMAN.NS
+      - CREDITACC.NS
+      - CROMPTON.NS
+      - CUMMINSIND.NS
+      - CYIENT.NS
+      - DLF.NS
+      - DOMS.NS
+      - DABUR.NS
+      - DALBHARAT.NS
+      - DATAPATTNS.NS
+      - DEEPAKFERT.NS
+      - DEEPAKNTR.NS
+      - DELHIVERY.NS
+      - DEVYANI.NS
+      - DIVISLAB.NS
+      - DIXON.NS
+      - LALPATHLAB.NS
+      - DRREDDY.NS
+      - EIDPARRY.NS
+      - EIHOTEL.NS
+      - EASEMYTRIP.NS
+      - EICHERMOT.NS
+      - ELECON.NS
+      - ELGIEQUIP.NS
+      - EMAMILTD.NS
+      - EMCURE.NS
+      - ENDURANCE.NS
+      - ENGINERSIN.NS
+      - EQUITASBNK.NS
+      - ERIS.NS
+      - ESCORTS.NS
+      - EXIDEIND.NS
+      - NYKAA.NS
+      - FEDERALBNK.NS
+      - FACT.NS
+      - FINEORG.NS
+      - FINCABLES.NS
+      - FINPIPE.NS
+      - FSL.NS
+      - FIVESTAR.NS
+      - FORTIS.NS
+      - GRINFRA.NS
+      - GAIL.NS
+      - GVT&D.NS
+      - GMRAIRPORT.NS
+      - GRSE.NS
+      - GICRE.NS
+      - GILLETTE.NS
+      - GLAND.NS
+      - GLAXO.NS
+      - GLENMARK.NS
+      - MEDANTA.NS
+      - GODIGIT.NS
+      - GPIL.NS
+      - GODFRYPHLP.NS
+      - GODREJAGRO.NS
+      - GODREJCP.NS
+      - GODREJIND.NS
+      - GODREJPROP.NS
+      - GRANULES.NS
+      - GRAPHITE.NS
+      - GRASIM.NS
+      - GESHIP.NS
+      - GRINDWELL.NS
+      - GAEL.NS
+      - FLUOROCHEM.NS
+      - GUJGASLTD.NS
+      - GMDCLTD.NS
+      - GNFC.NS
+      - GPPL.NS
+      - GSFC.NS
+      - GSPL.NS
+      - HEG.NS
+      - HBLENGINE.NS
+      - HCLTECH.NS
+      - HDFCAMC.NS
+      - HDFCBANK.NS
+      - HDFCLIFE.NS
+      - HFCL.NS
+      - HAPPSTMNDS.NS
+      - HAVELLS.NS
+      - HEROMOTOCO.NS
+      - HSCL.NS
+      - HINDALCO.NS
+      - HAL.NS
+      - HINDCOPPER.NS
+      - HINDPETRO.NS
+      - HINDUNILVR.NS
+      - HINDZINC.NS
+      - POWERINDIA.NS
+      - HOMEFIRST.NS
+      - HONASA.NS
+      - HONAUT.NS
+      - HUDCO.NS
+      - ICICIBANK.NS
+      - ICICIGI.NS
+      - ICICIPRULI.NS
+      - ISEC.NS
+      - IDBI.NS
+      - IDFCFIRSTB.NS
+      - IFCI.NS
+      - IIFL.NS
+      - INOXINDIA.NS
+      - IRB.NS
+      - IRCON.NS
+      - ITC.NS
+      - ITI.NS
+      - INDGN.NS
+      - INDIACEM.NS
+      - INDIAMART.NS
+      - INDIANB.NS
+      - IEX.NS
+      - INDHOTEL.NS
+      - IOC.NS
+      - IOB.NS
+      - IRCTC.NS
+      - IRFC.NS
+      - IREDA.NS
+      - IGL.NS
+      - INDUSTOWER.NS
+      - INDUSINDBK.NS
+      - NAUKRI.NS
+      - INFY.NS
+      - INOXWIND.NS
+      - INTELLECT.NS
+      - INDIGO.NS
+      - IPCALAB.NS
+      - JBCHEPHARM.NS
+      - JKCEMENT.NS
+      - JBMA.NS
+      - JKLAKSHMI.NS
+      - JKTYRE.NS
+      - JMFINANCIL.NS
+      - JSWENERGY.NS
+      - JSWINFRA.NS
+      - JSWSTEEL.NS
+      - JPPOWER.NS
+      - J&KBANK.NS
+      - JINDALSAW.NS
+      - JSL.NS
+      - JINDALSTEL.NS
+      - JIOFIN.NS
+      - JUBLFOOD.NS
+      - JUBLINGREA.NS
+      - JUBLPHARMA.NS
+      - JWL.NS
+      - JUSTDIAL.NS
+      - JYOTHYLAB.NS
+      - JYOTICNC.NS
+      - KPRMILL.NS
+      - KEI.NS
+      - KNRCON.NS
+      - KPITTECH.NS
+      - KSB.NS
+      - KAJARIACER.NS
+      - KPIL.NS
+      - KALYANKJIL.NS
+      - KANSAINER.NS
+      - KARURVYSYA.NS
+      - KAYNES.NS
+      - KEC.NS
+      - KFINTECH.NS
+      - KIRLOSBROS.NS
+      - KIRLOSENG.NS
+      - KOTAKBANK.NS
+      - KIMS.NS
+      - LTF.NS
+      - LTTS.NS
+      - LICHSGFIN.NS
+      - LTIM.NS
+      - LT.NS
+      - LATENTVIEW.NS
+      - LAURUSLABS.NS
+      - LEMONTREE.NS
+      - LICI.NS
+      - LINDEINDIA.NS
+      - LLOYDSME.NS
+      - LUPIN.NS
+      - MMTC.NS
+      - MRF.NS
+      - LODHA.NS
+      - MGL.NS
+      - MAHSEAMLES.NS
+      - M&MFIN.NS
+      - M&M.NS
+      - MAHLIFE.NS
+      - MANAPPURAM.NS
+      - MRPL.NS
+      - MANKIND.NS
+      - MARICO.NS
+      - MARUTI.NS
+      - MASTEK.NS
+      - MFSL.NS
+      - MAXHEALTH.NS
+      - MAZDOCK.NS
+      - METROBRAND.NS
+      - METROPOLIS.NS
+      - MINDACORP.NS
+      - MSUMI.NS
+      - MOTILALOFS.NS
+      - MPHASIS.NS
+      - MCX.NS
+      - MUTHOOTFIN.NS
+      - NATCOPHARM.NS
+      - NBCC.NS
+      - NCC.NS
+      - NHPC.NS
+      - NLCINDIA.NS
+      - NMDC.NS
+      - NSLNISP.NS
+      - NTPC.NS
+      - NH.NS
+      - NATIONALUM.NS
+      - NAVINFLUOR.NS
+      - NESTLEIND.NS
+      - NETWEB.NS
+      - NETWORK18.NS
+      - NEWGEN.NS
+      - NAM-INDIA.NS
+      - NUVAMA.NS
+      - NUVOCO.NS
+      - OBEROIRLTY.NS
+      - ONGC.NS
+      - OIL.NS
+      - OLECTRA.NS
+      - PAYTM.NS
+      - OFSS.NS
+      - POLICYBZR.NS
+      - PCBL.NS
+      - PIIND.NS
+      - PNBHOUSING.NS
+      - PNCINFRA.NS
+      - PTCIL.NS
+      - PVRINOX.NS
+      - PAGEIND.NS
+      - PATANJALI.NS
+      - PERSISTENT.NS
+      - PETRONET.NS
+      - PFIZER.NS
+      - PHOENIXLTD.NS
+      - PIDILITIND.NS
+      - PEL.NS
+      - PPLPHARMA.NS
+      - POLYMED.NS
+      - POLYCAB.NS
+      - POONAWALLA.NS
+      - PFC.NS
+      - POWERGRID.NS
+      - PRAJIND.NS
+      - PRESTIGE.NS
+      - PGHH.NS
+      - PNB.NS
+      - QUESS.NS
+      - RRKABEL.NS
+      - RBLBANK.NS
+      - RECLTD.NS
+      - RHIM.NS
+      - RITES.NS
+      - RADICO.NS
+      - RVNL.NS
+      - RAILTEL.NS
+      - RAINBOW.NS
+      - RAJESHEXPO.NS
+      - RKFORGE.NS
+      - RCF.NS
+      - RATNAMANI.NS
+      - RTNINDIA.NS
+      - RAYMOND.NS
+      - REDINGTON.NS
+      - RELIANCE.NS
+      - ROUTE.NS
+      - SBFC.NS
+      - SBICARD.NS
+      - SBILIFE.NS
+      - SJVN.NS
+      - SKFINDIA.NS
+      - SRF.NS
+      - SAMMAANCAP.NS
+      - MOTHERSON.NS
+      - SANOFI.NS
+      - SAPPHIRE.NS
+      - SAREGAMA.NS
+      - SCHAEFFLER.NS
+      - SCHNEIDER.NS
+      - SCI.NS
+      - SHREECEM.NS
+      - RENUKA.NS
+      - SHRIRAMFIN.NS
+      - SHYAMMETL.NS
+      - SIEMENS.NS
+      - SIGNATURE.NS
+      - SOBHA.NS
+      - SOLARINDS.NS
+      - SONACOMS.NS
+      - SONATSOFTW.NS
+      - STARHEALTH.NS
+      - SBIN.NS
+      - SAIL.NS
+      - SWSOLAR.NS
+      - SUMICHEM.NS
+      - SPARC.NS
+      - SUNPHARMA.NS
+      - SUNTV.NS
+      - SUNDARMFIN.NS
+      - SUNDRMFAST.NS
+      - SUPREMEIND.NS
+      - SUVENPHAR.NS
+      - SUZLON.NS
+      - SWANENERGY.NS
+      - SYNGENE.NS
+      - SYRMA.NS
+      - TBOTEK.NS
+      - TVSMOTOR.NS
+      - TVSSCS.NS
+      - TANLA.NS
+      - TATACHEM.NS
+      - TATACOMM.NS
+      - TCS.NS
+      - TATACONSUM.NS
+      - TATAELXSI.NS
+      - TATAINVEST.NS
+      - TATAMOTORS.NS
+      - TATAPOWER.NS
+      - TATASTEEL.NS
+      - TATATECH.NS
+      - TTML.NS
+      - TECHM.NS
+      - TECHNOE.NS
+      - TEJASNET.NS
+      - NIACL.NS
+      - RAMCOCEM.NS
+      - THERMAX.NS
+      - TIMKEN.NS
+      - TITAGARH.NS
+      - TITAN.NS
+      - TORNTPHARM.NS
+      - TORNTPOWER.NS
+      - TRENT.NS
+      - TRIDENT.NS
+      - TRIVENI.NS
+      - TRITURBINE.NS
+      - TIINDIA.NS
+      - UCOBANK.NS
+      - UNOMINDA.NS
+      - UPL.NS
+      - UTIAMC.NS
+      - UJJIVANSFB.NS
+      - ULTRACEMCO.NS
+      - UNIONBANK.NS
+      - UBL.NS
+      - UNITDSPR.NS
+      - USHAMART.NS
+      - VGUARD.NS
+      - VIPIND.NS
+      - DBREALTY.NS
+      - VTL.NS
+      - VARROC.NS
+      - VBL.NS
+      - MANYAVAR.NS
+      - VEDL.NS
+      - VIJAYA.NS
+      - VINATIORGA.NS
+      - IDEA.NS
+      - VOLTAS.NS
+      - WELCORP.NS
+      - WELSPUNLIV.NS
+      - WESTLIFE.NS
+      - WHIRLPOOL.NS
+      - WIPRO.NS
+      - YESBANK.NS
+      - ZFCVINDIA.NS
+      - ZEEL.NS
+      - ZENSARTECH.NS
+      - ZOMATO.NS
+      - ZYDUSLIFE.NS
+      - ECLERX.NS
+
+  upstox:
+    symbols:
+      - NSE_EQ
+      - NSE_FO
+      - NCD_FO
+      - BSE_EQ
+      - BSE_FO
+      - BCD_FO
+      - MCX_FO
+      - NSE_COM
+      - NSE_INDEX
+      - BSE_INDEX
+      - MCX_INDEX
+
+  dhan:
+    symbol_security_pairs:
+      - symbol: 360ONE
+        security_id: 13061
+      - symbol: 3MINDIA
+        security_id: 474
+      - symbol: ABB
+        security_id: 13
+      - symbol: ACC
+        security_id: 22
+      - symbol: AIAENG
+        security_id: 13086
+      - symbol: APLAPOLLO
+        security_id: 25780
+      - symbol: AUBANK
+        security_id: 21238
+      - symbol: AADHARHFC
+        security_id: 23729
+      - symbol: AARTIIND
+        security_id: 7
+      - symbol: AAVAS
+        security_id: 5385
+      - symbol: ABBOTINDIA
+        security_id: 17903
+      - symbol: ACE
+        security_id: 13587
+      - symbol: ADANIENSOL
+        security_id: 10217
+      - symbol: ADANIENT
+        security_id: 25
+      - symbol: ADANIGREEN
+        security_id: 3563
+      - symbol: ADANIPORTS
+        security_id: 15083
+      - symbol: ADANIPOWER
+        security_id: 17388
+      - symbol: ATGL
+        security_id: 6066
+      - symbol: AWL
+        security_id: 8110
+      - symbol: ABCAPITAL
+        security_id: 21614
+      - symbol: ABFRL
+        security_id: 30108
+      - symbol: ABREL
+        security_id: 625
+      - symbol: ABSLAMC
+        security_id: 6018
+      - symbol: AEGISLOG
+        security_id: 40
+      - symbol: AFFLE
+        security_id: 11343
+      - symbol: AJANTPHARM
+        security_id: 8124
+      - symbol: AKUMS
+        security_id: 24715
+      - symbol: APLLTD
+        security_id: 25328
+      - symbol: ALKEM
+        security_id: 11703
+      - symbol: ALKYLAMINE
+        security_id: 4487
+      - symbol: ALOKINDS
+        security_id: 17675
+      - symbol: ARE&M
+        security_id: 100
+      - symbol: AMBER
+        security_id: 1185
+      - symbol: AMBUJACEM
+        security_id: 1270
+      - symbol: ANANDRATHI
+        security_id: 7145
+      - symbol: ANANTRAJ
+        security_id: 13620
+      - symbol: ANGELONE
+        security_id: 324
+      - symbol: APARINDS
+        security_id: 11491
+      - symbol: APOLLOHOSP
+        security_id: 157
+      - symbol: APOLLOTYRE
+        security_id: 163
+      - symbol: APTUS
+        security_id: 5435
+      - symbol: ACI
+        security_id: 12024
+      - symbol: ASAHIINDIA
+        security_id: 5378
+      - symbol: ASHOKLEY
+        security_id: 212
+      - symbol: ASIANPAINT
+        security_id: 236
+      - symbol: ASTERDM
+        security_id: 1508
+      - symbol: ASTRAZEN
+        security_id: 5610
+      - symbol: ASTRAL
+        security_id: 14418
+      - symbol: ATUL
+        security_id: 263
+      - symbol: AUROPHARMA
+        security_id: 275
+      - symbol: AVANTIFEED
+        security_id: 7936
+      - symbol: DMART
+        security_id: 19913
+      - symbol: AXISBANK
+        security_id: 5900
+      - symbol: BASF
+        security_id: 368
+      - symbol: BEML
+        security_id: 395
+      - symbol: BLS
+        security_id: 17279
+      - symbol: BSE
+        security_id: 19585
+      - symbol: BAJAJ-AUTO
+        security_id: 16669
+      - symbol: BAJFINANCE
+        security_id: 317
+      - symbol: BAJAJFINSV
+        security_id: 16675
+      - symbol: BAJAJHLDNG
+        security_id: 305
+      - symbol: BALAMINES
+        security_id: 14501
+      - symbol: BALKRISIND
+        security_id: 335
+      - symbol: BALRAMCHIN
+        security_id: 341
+      - symbol: BANDHANBNK
+        security_id: 2263
+      - symbol: BANKBARODA
+        security_id: 4668
+      - symbol: BANKINDIA
+        security_id: 4745
+      - symbol: MAHABANK
+        security_id: 11377
+      - symbol: BATAINDIA
+        security_id: 371
+      - symbol: BAYERCROP
+        security_id: 17927
+      - symbol: BERGEPAINT
+        security_id: 404
+      - symbol: BDL
+        security_id: 2144
+      - symbol: BEL
+        security_id: 383
+      - symbol: BHARATFORG
+        security_id: 422
+      - symbol: BHEL
+        security_id: 438
+      - symbol: BPCL
+        security_id: 526
+      - symbol: BHARTIARTL
+        security_id: 10604
+      - symbol: BHARTIHEXA
+        security_id: 23489
+      - symbol: BIKAJI
+        security_id: 11966
+      - symbol: BIOCON
+        security_id: 11373
+      - symbol: BIRLACORPN
+        security_id: 480
+      - symbol: BSOFT
+        security_id: 6994
+      - symbol: BLUEDART
+        security_id: 495
+      - symbol: BLUESTARCO
+        security_id: 8311
+      - symbol: BBTC
+        security_id: 380
+      - symbol: BOSCHLTD
+        security_id: 2181
+      - symbol: BRIGADE
+        security_id: 15184
+      - symbol: BRITANNIA
+        security_id: 547
+      - symbol: MAPMYINDIA
+        security_id: 7227
+      - symbol: CCL
+        security_id: 11452
+      - symbol: CESC
+        security_id: 628
+      - symbol: CGPOWER
+        security_id: 760
+      - symbol: CIEINDIA
+        security_id: 14937
+      - symbol: CRISIL
+        security_id: 757
+      - symbol: CAMPUS
+        security_id: 9362
+      - symbol: CANFINHOME
+        security_id: 583
+      - symbol: CANBK
+        security_id: 10794
+      - symbol: CAPLIPOINT
+        security_id: 3906
+      - symbol: CGCL
+        security_id: 20329
+      - symbol: CASTROLIND
+        security_id: 1250
+      - symbol: CEATLTD
+        security_id: 15254
+      - symbol: CELLO
+        security_id: 19795
+      - symbol: CENTRALBK
+        security_id: 14894
+      - symbol: CDSL
+        security_id: 21174
+      - symbol: CENTURYPLY
+        security_id: 13305
+      - symbol: CERA
+        security_id: 15039
+      - symbol: CHALET
+        security_id: 8546
+      - symbol: CHAMBLFERT
+        security_id: 637
+      - symbol: CHENNPETRO
+        security_id: 2049
+      - symbol: CHOLAHLDNG
+        security_id: 21740
+      - symbol: CHOLAFIN
+        security_id: 19257
+      - symbol: CIPLA
+        security_id: 694
+      - symbol: COALINDIA
+        security_id: 20374
+      - symbol: COFORGE
+        security_id: 11543
+      - symbol: COLPAL
+        security_id: 15141
+      - symbol: CONCOR
+        security_id: 4749
+      - symbol: COROMANDEL
+        security_id: 739
+      - symbol: CROMPTON
+        security_id: 17094
+      - symbol: CUMMINSIND
+        security_id: 1901
+      - symbol: CYIENT
+        security_id: 5748
+      - symbol: DLF
+        security_id: 14732
+      - symbol: DABUR
+        security_id: 772
+      - symbol: DIVISLAB
+        security_id: 10940
+      - symbol: DRREDDY
+        security_id: 881
+      - symbol: EICHERMOT
+        security_id: 910
+      - symbol: EXIDEIND
+        security_id: 676
+      - symbol: HDFCBANK
+        security_id: 1333
+      - symbol: HINDUNILVR
+        security_id: 1394
+      - symbol: ICICIBANK
+        security_id: 4963
+      - symbol: INFY
+        security_id: 1594
+      - symbol: ITC
+        security_id: 1660
+      - symbol: KOTAKBANK
+        security_id: 1922
+      - symbol: LT
+        security_id: 11483
+      - symbol: MARUTI
+        security_id: 10999
+      - symbol: NTPC
+        security_id: 11630
+      - symbol: ONGC
+        security_id: 2475
+      - symbol: POWERGRID
+        security_id: 14977
+      - symbol: RELIANCE
+        security_id: 2885
+      - symbol: SBIN
+        security_id: 3045
+      - symbol: SUNPHARMA
+        security_id: 3351
+      - symbol: TCS
+        security_id: 11536
+      - symbol: TATAMOTORS
+        security_id: 3456
+      - symbol: TATASTEEL
+        security_id: 3499
+      - symbol: TITAN
+        security_id: 3506
+      - symbol: ULTRACEMCO
+        security_id: 11532
+      - symbol: WIPRO
+        security_id: 3787
+      - symbol: YESBANK
+        security_id: 11915
+      - symbol: ZOMATO
+        security_id: 5097

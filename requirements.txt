@@ -1,0 +1,13 @@
+numpy
+pandas>=2.3.0
+requests==2.32.5
+yfinance
+dhanhq
+pyyaml
+# datetime
+# tkinter
+
+#LINTING
+mypy
+pylint
+python-dotenv
