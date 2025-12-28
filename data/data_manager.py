@@ -1,5 +1,5 @@
 from typing import Iterable
-from core.CommonTypes import QKApi, QKDate, Unit
+from core.common_types import QKApi, QKDate, Unit
 from data.APIs.historical_data.data_fetcher_base import DataFetcherBase
 from data.APIs.historical_data.dhan_fetcher import DhanFetcher
 from data.APIs.historical_data.upstox_fetcher import UpstoxFetcher

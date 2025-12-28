@@ -13,6 +13,12 @@ class Unit(Enum):
     months = 'mo'
     years = 'y'
 
+class TickerSource(Enum):
+    INDIA = "D:/PycharmProjects/quant-kernel/data/APIs/ticker_symbols/india.yaml"
+    # FUTURE:
+    # US = "data/APIs/ticker_symbols/us.yaml"
+    # CRYPTO = "data/APIs/ticker_symbols/crypto.yaml"
+
 from datetime import datetime, timedelta
 
 

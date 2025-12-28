@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Iterable
 
 from data.APIs.historical_data.data_fetcher_base import DataFetcherBase, QKCandle
-from core.CommonTypes import Unit
+from core.common_types import Unit
 
 
 class YahooFetcher(DataFetcherBase):

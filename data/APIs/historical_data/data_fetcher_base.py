@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from typing import Iterable
 import pandas as pd
 
-from core.CommonTypes import QKCandle, Unit
+from core.common_types import QKCandle, Unit
 
 
 class DataFetcherBase(ABC):
