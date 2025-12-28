@@ -96,7 +96,7 @@ UPSTOX_ACCESS_TOKEN=your_token
 ### Basic Data Fetching
 
 ```python
-from data.data_manager import QKHistoricalData
+from data.QK_data_manager import QKHistoricalData
 from core.CommonTypes import QKApi
 
 # Initialize with Upstox

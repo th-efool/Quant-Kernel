@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Iterable
 
 from core.env import get_env
-from data.APIs.historical_data.data_fetcher_base import (
+from data.historical_data.base.data_fetcher_base import (
     DataFetcherBase,
     QKCandle,
 )

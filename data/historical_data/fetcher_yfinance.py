@@ -3,7 +3,7 @@ import yfinance as yf
 from datetime import datetime
 from typing import Iterable
 
-from data.APIs.historical_data.data_fetcher_base import DataFetcherBase, QKCandle
+from data.historical_data.base.data_fetcher_base import DataFetcherBase, QKCandle
 from core.common_types import Unit
 
 

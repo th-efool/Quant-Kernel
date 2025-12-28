@@ -1,10 +1,10 @@
 from typing import Iterable
 from core.common_types import QKApi, QKDate, Unit
-from data.APIs.historical_data.data_fetcher_base import DataFetcherBase
-from data.APIs.historical_data.dhan_fetcher import DhanFetcher
-from data.APIs.historical_data.upstox_fetcher import UpstoxFetcher
-from data.APIs.historical_data.yfinance_fetcher import YahooFetcher
-from data.APIs.ticker_symbols.ticker_manager import TickerManager
+from data.historical_data.base.data_fetcher_base import DataFetcherBase
+from data.historical_data.fetcher_dhan import DhanFetcher
+from data.historical_data.fetcher_upstox import UpstoxFetcher
+from data.historical_data.fetcher_yfinance import YahooFetcher
+from data.ticker_symbols.QK_ticker_manager import TickerManager
 from typing import assert_never
 
 

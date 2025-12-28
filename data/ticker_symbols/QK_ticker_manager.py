@@ -1,6 +1,6 @@
-from typing import Iterable, Sequence
+from typing import Sequence
 from core.common_types import QKApi
-from data.APIs.ticker_symbols.ticker_loader import load_tickers_for_api
+from data.ticker_symbols.ticker_loader import load_tickers_for_api
 
 
 class TickerManager:
