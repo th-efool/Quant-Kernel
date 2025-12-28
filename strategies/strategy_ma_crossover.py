@@ -1,31 +1,29 @@
 # strategies/strategy_ma_crossover.py
 import pandas as pd
+
+from indicators.indicator_moving_average import MovingAverage
 from strategies.base.strategy_base import StrategyBase
 from strategies.base.signal_type import Signal
 
 
 class MACrossoverStrategy(StrategyBase):
-    signal_column = "ma_cross_signal"
+    signal_column = "ma_cross"
 
-    def __init__(self, fast: str, slow: str):
+    def __init__(self, fast, slow):
         self.fast = fast
         self.slow = slow
 
-    def compute(self, df: pd.DataFrame) -> pd.Series:
-        signal = pd.Series(Signal.HOLD, index=df.index)
+    def indicators(self):
+        return [
+            MovingAverage(self.fast),
+            MovingAverage(self.slow),
+        ]
 
-        if self.fast not in df or self.slow not in df:
-            return signal
+    def compute(self, df):
+        signal = pd.Series(0, index=df.index)
+        f, sl = df[self.fast], df[self.slow]
 
-        fast = df[self.fast]
-        slow = df[self.slow]
-
-        valid = fast.notna() & slow.notna()
-
-        cross_up = (fast > slow) & (fast.shift(1) <= slow.shift(1))
-        cross_dn = (fast < slow) & (fast.shift(1) >= slow.shift(1))
-
-        signal[valid & cross_up] = Signal.BUY
-        signal[valid & cross_dn] = Signal.SELL
-
+        signal[(f > sl) & (f.shift(1) <= sl.shift(1))] = 1
+        signal[(f < sl) & (f.shift(1) >= sl.shift(1))] = -1
         return signal
+
