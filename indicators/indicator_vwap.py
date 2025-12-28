@@ -3,26 +3,38 @@ from indicators.base.indicator_base import IndicatorBase
 
 
 class VWAP(IndicatorBase):
-    def __init__(self, timeframe: str = "D"):
-        """
-        timeframe:
-            'D' = Daily VWAP
-            'W' = Weekly VWAP
-        """
-        self.timeframe = timeframe.lower()
+    def __init__(self, days: int):
+        self.days = days
 
     def compute(self, df: pd.DataFrame) -> dict:
-        df = df.copy()
+        tp = (df["high"] + df["low"] + df["close"]) / 3
+        vol = df["volume"]
 
-        df["tp"] = (df["high"] + df["low"] + df["close"]) / 3
-        df["tp_vol"] = df["tp"] * df["volume"]
+        vwap = pd.Series(index=df.index, dtype="float64")
 
-        period = df["timestamp"].dt.to_period(self.timeframe)
+        # Normalize timestamps to date boundary
+        dates = df["timestamp"].dt.floor("D")
 
-        vwap = (
-            df.groupby(period)
-            .apply(lambda x: x["tp_vol"].cumsum() / x["volume"].cumsum())
-            .reset_index(level=0, drop=True)
-        )
+        cum_tp_vol = 0.0
+        cum_vol = 0.0
+        current_start = dates.iloc[0]
 
-        return {f"vwap_{self.timeframe}": vwap}
+        for i in range(len(df)):
+            # reset when window exceeds N days
+            if (dates.iloc[i] - current_start).days >= self.days:
+                current_start = dates.iloc[i]
+                cum_tp_vol = 0.0
+                cum_vol = 0.0
+
+            cum_tp_vol += tp.iloc[i] * vol.iloc[i]
+            cum_vol += vol.iloc[i]
+
+            if cum_vol == 0:
+                vwap.iloc[i] = float("nan")
+            else:
+                vwap.iloc[i] = cum_tp_vol / cum_vol
+
+        return {self.column_name(): vwap}
+
+    def column_name(self):
+        return f"vwap_{self.days}d"

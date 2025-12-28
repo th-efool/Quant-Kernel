@@ -1,52 +1,54 @@
-# strategies/QK_strategy_manager.py
+
 import pandas as pd
 from strategies.base.strategy_base import StrategyBase
+from indicators.QK_indicator_manager import IndicatorManager
 
 
 class StrategyManager:
     def __init__(self):
-        self._strategies: list[StrategyBase] = []
+        self._strategies = {}   # key -> strategy instance
+        self._indicator_manager = IndicatorManager()
 
-    def add(self, strategy: StrategyBase):
-        self._strategies.append(strategy)
+    def _make_key(self, strategy_cls, params: dict):
+        return (strategy_cls, frozenset(params.items()))
+
+    def add(self, strategy_type):
+        config = strategy_type.value
+
+        strategy_cls = config["strategy"]
+        params = config.get("params", {})
+
+        key = self._make_key(strategy_cls, params)
+
+        # Register indicators (idempotent)
+        for ind in config["indicators"]:
+            self._indicator_manager.add(ind)
+
+        # Override if already exists
+        self._strategies[key] = strategy_cls(**params)
+
         return self
 
-    def run(self, df: pd.DataFrame) -> pd.DataFrame:
-        df = df.copy()
+    def run(self, df):
+        df = self._indicator_manager.run(df)
 
-        for strategy in self._strategies:
+        for strategy in self._strategies.values():
             signal = strategy.compute(df)
-
-            if not signal.index.equals(df.index):
-                raise ValueError("Signal index mismatch")
-
             df[strategy.signal_column] = signal
 
         return df
 
 
-from indicators.QK_indicator_manager import IndicatorManager
-from indicators.base.indicator_type import IndicatorType
+
+
 from strategies.QK_strategy_manager import StrategyManager
-from strategies.strategy_ma_crossover import MACrossoverStrategy
-from strategies.strategy_mcginley_breakout import McGinleyBreakoutStrategy
+from strategies.base.strategy_type import StrategyType
 from core.test_data_generator import make_test_df
 
 if __name__ == "__main__":
     df = make_test_df(100)
 
-    # --- indicators ---
-    ind_mgr = IndicatorManager()
-    ind_mgr.add(IndicatorType.MA(period=7))
-    ind_mgr.add(IndicatorType.MA(period=21))
-    ind_mgr.add(IndicatorType.MC_GINLEY(period=14))
-
-    df = ind_mgr.run(df)
-
-    # --- strategies ---
-    strat_mgr = StrategyManager()
-    strat_mgr.add(MACrossoverStrategy("ma_7", "ma_21"))
-    strat_mgr.add(McGinleyBreakoutStrategy("close", "mcginley_14"))
-
-    df = strat_mgr.run(df)
+    strategy_mgr = StrategyManager()
+    strategy_mgr.add(StrategyType.VWAP_1D_7D)
+    df = strategy_mgr.run(df)
     print(df)
