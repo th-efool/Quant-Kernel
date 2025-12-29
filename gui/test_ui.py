@@ -3,11 +3,27 @@ import tkinter as tk
 from data.QK_data_manager import QKHistoricalData
 from strategies.QK_strategy_manager import StrategyManager
 from gui.QKRenderer import QKRenderer
+from gui.components.stock_chart import StockChartComponent
+from gui.components.select_and_configure import SelectAndConfigure
+from indicators.indicator_moving_average import MovingAverage
+from indicators.indicator_vwap import VWAP
+from strategies.strategy_day_range_breakout import DayRangeBreakoutStrategy
+from gui.components.select_and_configure import SelectAndConfigure
+from gui.components.param_spec import ParamSpec
+from strategies.strategy_ma_crossover import MACrossoverStrategy
+from strategies.strategy_day_range_breakout import DayRangeBreakoutStrategy
+from strategies.strategy_vwap_crossover import VWAPCrossoverStrategy
+
+from indicators.indicator_moving_average import MovingAverage
+from indicators.indicator_vwap import VWAP
+from indicators.indicator_day_range_percentage import DayRangePct
+from indicators.indicator_mcginley import McGinleyDynamic
 
 from gui.layout.column import Column
 from gui.components.param_input import ParamInputComponent
 from gui.components.param_spec import ParamSpec
 from gui.components.collapsible_panel import CollapsiblePanel
+from gui.components.api_selector import ApiTickerSelector
 
 from core.common_types import Unit
 from indicators.base.indicator_type import IndicatorType
@@ -16,6 +32,8 @@ from strategies.strategy_ma_crossover import MACrossoverStrategy
 TheDataManager = QKHistoricalData()
 TheStrategyManager = StrategyManager()
 Renderer = QKRenderer(title="QK UI Test", size=(900, 700))
+
+api_selector = ApiTickerSelector()
 
 api_config = ParamInputComponent(
     specs=[
@@ -26,45 +44,84 @@ api_config = ParamInputComponent(
     title="API Config"
 )
 
+chart = StockChartComponent(title="Market Chart")
+
 fetch_config = ParamInputComponent(
     specs=[
         ParamSpec("mode", str, default="historical"),  # or Enum later
         ParamSpec("interval", int, default=1),
         ParamSpec("intraday_interval", int, optional=True),
-        ParamSpec("from_date", str),
-        ParamSpec("to_date", str),
+        ParamSpec("from_date", str, default='2024-12-01'),
+        ParamSpec("to_date", str, default='2024-12-24'),
         ParamSpec("unit", Unit, default=Unit.days),
 
     ],
     title="Fetch Config"
 )
 
-indicator_params = ParamInputComponent(
-    specs=[
-        ParamSpec("period", int),
-    ],
-    title="Moving Average Params"
+indicator_selector = SelectAndConfigure(
+    title="Add Indicator",
+    registry={
+        "Moving Average": (
+            MovingAverage,
+            [
+                ParamSpec("period", int),
+            ],
+        ),
+
+        "VWAP": (
+            VWAP,
+            [
+                ParamSpec("days", int),   # 🔥 THIS WAS MISSING
+            ],
+        ),
+
+        "Day Range %": (
+            DayRangePct,
+            [],  # no params
+        ),
+
+        "McGinley Dynamic": (
+            McGinleyDynamic,
+            [
+                ParamSpec("period", int, default=14),
+                ParamSpec("source", str, default="close"),
+                ParamSpec("k", float, default=0.6),
+            ],
+        ),
+    },
 )
 
-indicator_panel = CollapsiblePanel(
-    title="Add Indicator (MA)",
-    content=indicator_params,
-    start_open=False,
+
+strategy_selector = SelectAndConfigure(
+    title="Add Strategy",
+    registry={
+        "MA Crossover": (
+            MACrossoverStrategy,
+            [
+                ParamSpec("fast", int),
+                ParamSpec("slow", int),
+            ],
+        ),
+
+        "VWAP Crossover": (
+            VWAPCrossoverStrategy,
+            [
+                ParamSpec("fast_days", int),
+                ParamSpec("slow_days", int),
+            ],
+        ),
+
+        "Day Range Breakout": (
+            DayRangeBreakoutStrategy,
+            [
+                ParamSpec("threshold", float, default=0.05),
+            ],
+        ),
+    },
 )
 
-strategy_params = ParamInputComponent(
-    specs=[
-        ParamSpec("fast", int),
-        ParamSpec("slow", int),
-    ],
-    title="MA Crossover Strategy"
-)
 
-strategy_panel = CollapsiblePanel(
-    title="Add Strategy (MA Crossover)",
-    content=strategy_params,
-    start_open=False,
-)
 
 
 def run_pipeline():
@@ -72,13 +129,13 @@ def run_pipeline():
 
     api_vals = api_config.get_value()
     fetch_vals = fetch_config.get_value()
-    ind_vals = indicator_panel.get_value()
-    strat_vals = strategy_panel.get_value()
+    indicator = indicator_selector.get_value()
+    strategy = strategy_selector.get_value()
 
     print("API:", api_vals)
     print("FETCH:", fetch_vals)
-    print("INDICATOR:", ind_vals)
-    print("STRATEGY:", strat_vals)
+    print("INDICATOR:", indicator)
+    print("STRATEGY:", strategy)
 
     # ---------------- APPLY FETCH CONFIG ----------------
 
@@ -94,8 +151,15 @@ def run_pipeline():
 
     # ---------------- FETCH DATA (TEST ONLY) ----------------
     # using a dummy ticker for now
+    api_ticker = api_selector.get_value()
+    if not api_ticker:
+        print("No API / Ticker selected")
+        return
 
-    ticker = "3MINDIA.NS"
+    selected_api = api_ticker["api"]
+    ticker = api_ticker["ticker"]
+    TheDataManager.switch_api(selected_api)
+
 
     if fetch_mode == "intraday":
         print("[FETCH MODE] Intraday")
@@ -105,13 +169,15 @@ def run_pipeline():
         df = TheDataManager.fetch_historical(ticker)
 
     print("DF SHAPE:", df.shape)
+    chart.set_data(df)
 
     # ---------------- STRATEGY (OPTIONAL) ----------------
 
-    if strat_vals:
-        TheStrategyManager.add(
-            MACrossoverStrategy(**strat_vals)
-        )
+    if indicator:
+        TheStrategyManager._indicator_manager.add(indicator)
+
+    if strategy:
+        TheStrategyManager.add(strategy)
 
     # Just proving the pipeline works
     print("PIPELINE OK")
@@ -131,11 +197,12 @@ class RunButton:
 
 if __name__ == "__main__":
     layout = Column(spacing=12)
-    layout.add(api_config)
+    layout.add(api_selector)
     layout.add(fetch_config)
-    layout.add(indicator_panel)
-    layout.add(strategy_panel)
+    layout.add(indicator_selector)
+    layout.add(strategy_selector)
     layout.add(RunButton())
+    layout.add(chart)
 
     Renderer.set_layout(layout)
     Renderer.run()

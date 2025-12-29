@@ -61,7 +61,13 @@ class ParamInputComponent(UIComponent):
 
         if issubclass(spec.type, Enum):
             options = [e.name for e in spec.type]
-            var.set(options[0])
+
+            # Respect default if provided
+            if spec.default is not None:
+                var.set(spec.default.name)
+            else:
+                var.set(options[0])
+
             return tk.OptionMenu(parent, var, *options)
 
         return tk.Entry(parent, textvariable=var)
@@ -77,7 +83,6 @@ class ParamInputComponent(UIComponent):
             if var is None:
                 continue
 
-            ParamSpec("period", int, default=14)
             raw = var.get()
 
             if raw == "" and spec.optional:

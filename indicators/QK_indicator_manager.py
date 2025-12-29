@@ -41,9 +41,6 @@ if __name__ == "__main__":
     manager.add(IndicatorType.MC_GINLEY(period=22))
     manager.add(IndicatorType.MA(period=21))
     manager.add(IndicatorType.MA(period=21))
-
-    manager.add(IndicatorType.MA(period=21))
-    manager.add(IndicatorType.MA(period=21))
     manager.add(IndicatorType.MA(period=21))
 
     df = make_test_df(100)
