@@ -10,6 +10,22 @@ class TickerLoader:
         with open(self.source.value, "r") as f:
             return yaml.safe_load(f)
 
+    def get_n_tickers(
+        self,
+        api: QKApi,
+        exchange: str,
+        limit: int,
+    ) -> list[str]:
+        symbols = self.for_api(api, exchange)
+
+        if not symbols:
+            return []
+
+        if limit <= 0:
+            return []
+
+        return symbols[:limit]
+
     def for_api(self, api: QKApi, exchange: str = "NSE"):
         providers = self._config.get("providers", {})
 
