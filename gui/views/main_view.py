@@ -1,6 +1,8 @@
 # gui/views/main_view.py
 
 import tkinter as tk
+
+from gui.components.market_chart_view import MarketChartView
 from gui.layout.row import Row
 from gui.layout.column import Column
 from gui.components.api_selector import ApiTickerSelector
@@ -12,7 +14,7 @@ from gui.components.add_to_list import AddToListComponent
 
 
 
-from core.common_types import Unit, QKDate
+from core.common_types import Unit, QKDate, QKApi
 from indicators.indicator_moving_average import MovingAverage
 from indicators.indicator_vwap import VWAP
 from indicators.indicator_day_range_percentage import DayRangePct
@@ -39,7 +41,15 @@ class RunButton:
 
 
 def build_main_view(on_run_callback):
-    api_selector = ApiTickerSelector()
+    api_config = ParamInputComponent(
+        specs=[
+            ParamSpec("api", QKApi, default=QKApi.yfinance),
+            ParamSpec("exchange", str, default="NSE"),
+            ParamSpec("start_index", int, default=0),
+            ParamSpec("end_index", int, default=10),
+        ],
+        title="API Selection",
+    )
 
     fetch_config = ParamInputComponent(
         specs=[
@@ -116,12 +126,13 @@ def build_main_view(on_run_callback):
     )
 
 
-    chart = StockChartComponent(title="Market Chart")
+    chart = MarketChartView()
+
     run_button = RunButton(on_run_callback)
 
     # ---------- TOP LEFT (API + Fetch) ----------
     top_left = Column(spacing=12)
-    top_left.add(api_selector)
+    top_left.add(api_config)
     top_left.add(fetch_config)
     top_left.add(run_button)
 
@@ -141,7 +152,7 @@ def build_main_view(on_run_callback):
     layout.add(chart)
 
     ui_refs = {
-        "api_selector": api_selector,
+        "api_config": api_config,
         "fetch_config": fetch_config,
         "indicators": indicator_list,
         "strategies": strategy_list,

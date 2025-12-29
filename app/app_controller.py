@@ -7,8 +7,7 @@ from strategies.QK_strategy_manager import StrategyManager
 class AppController:
     """
     Central application orchestrator.
-    Owns the execution flow:
-    UI → Data → Indicators → Strategies → DataFrame
+    Executes pipeline for ONE ticker.
     """
 
     def __init__(
@@ -20,13 +19,17 @@ class AppController:
         self.strategy_manager = strategy_manager
 
     def run_pipeline(
-            self,
-            *,
-            api_info,
-            fetch_config,
-            indicators,
-            strategies
+        self,
+        *,
+        api,
+        ticker: str,
+        fetch_config,
+        indicators,
+        strategies,
     ):
+        # ---------- RESET STRATEGY STATE ----------
+        self.strategy_manager.clear()
+
         # ---------- APPLY FETCH CONFIG ----------
         self.data_manager.set_params(
             from_date=fetch_config["from_date"],
@@ -37,18 +40,19 @@ class AppController:
         )
 
         # ---------- API SWITCH ----------
-        self.data_manager.switch_api(api_info["api"])
+        self.data_manager.switch_api(api)
 
         # ---------- FETCH ----------
         if fetch_config["mode"] == "intraday":
-            df = self.data_manager.fetch_intraday(api_info["ticker"])
+            df = self.data_manager.fetch_intraday(ticker)
         else:
-            df = self.data_manager.fetch_historical(api_info["ticker"])
+            df = self.data_manager.fetch_historical(ticker)
 
-        # ---------- INDICATORS ----------
+        # ---------- REGISTER INDICATORS ----------
         for ind in indicators:
             self.strategy_manager._indicator_manager.add(ind)
 
+        # ---------- REGISTER STRATEGIES ----------
         for strat in strategies:
             self.strategy_manager.add(strat)
 

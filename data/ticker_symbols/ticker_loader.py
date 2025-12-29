@@ -42,6 +42,32 @@ class TickerLoader:
             case _:
                 raise ValueError(f"Unsupported API: {api}")
 
+    DEFAULT_TICKER_PER_API = {
+        QKApi.yfinance: "3MINDIA.NS",
+        QKApi.upstox: "NSE_EQ|INE848E01016",
+        QKApi.dhan: "360ONE",
+    }
+
+    def get_tickers(
+            self,
+            *,
+            api: QKApi,
+            exchange: str,
+            start: int = 0,
+            end: int | None = None,
+    ) -> list[str]:
+
+        all_tickers = self.for_api(api, exchange)
+
+        if not all_tickers:
+            # fallback default
+            return [self.DEFAULT_TICKER_PER_API[api]]
+
+        if end is None:
+            return all_tickers[start:]
+
+        return all_tickers[start:end]
+
     # --------------------------------------------------
     # DEBUG / INSPECTION
     # --------------------------------------------------

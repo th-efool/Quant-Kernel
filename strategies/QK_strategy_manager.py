@@ -52,6 +52,10 @@ class StrategyManager:
 
         return df
 
+    def clear(self):
+        self._strategies.clear()
+        self._indicator_manager.clear()
+
 
 
 

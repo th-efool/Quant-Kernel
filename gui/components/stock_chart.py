@@ -44,6 +44,7 @@ class StockChartComponent(UIComponent):
 
         return frame
 
+
     # ---------- DATA ----------
 
     def set_data(self, df: pd.DataFrame):

@@ -6,6 +6,9 @@ class IndicatorManager:
     def __init__(self):
         self._indicators = {}  # key -> indicator instance
 
+    def clear(self):
+        self._indicators.clear()
+
     def _make_key(self, indicator: IndicatorBase):
         # unique key per indicator configuration
         return (indicator.__class__, tuple(sorted(indicator.__dict__.items())))
