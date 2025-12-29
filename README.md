@@ -9,8 +9,8 @@ A GUI-based, Python quantitative research kernel for **indicator computation, st
 ![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)
 
 Quant-Kernel is built around **explicit pipelines**, **deterministic execution**, and a **strict separation between computation and rendering**.
-
 ![Quant Kernel Screenshot](https://raw.githubusercontent.com/th-efool/Quant-Kernel/main/docs/screenshot20251229195242.png)
+
 
 ---
 
