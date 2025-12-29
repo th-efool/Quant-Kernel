@@ -4,6 +4,7 @@ from typing import Iterable
 import pandas as pd
 
 from core.common_types import QKCandle, Unit
+from core.common_types import QKDate
 
 
 class DataFetcherBase(ABC):
@@ -64,13 +65,20 @@ class DataFetcherBase(ABC):
             *,
             symbol: str,
             intraday: bool,
-            start: datetime | None = None,
-            end: datetime | None = None,
+            start=None,
+            end=None,
             unit: Unit = Unit.days,
             interval: int = 1,
     ) -> pd.DataFrame:
 
         self._connect()
+
+        # 🔥 NORMALIZE DATES FOR EXTERNAL LIBS
+        if isinstance(start, QKDate):
+            start = start.to_datetime()
+
+        if isinstance(end, QKDate):
+            end = end.to_datetime()
 
         if intraday:
             if not self.supports_intraday:

@@ -12,7 +12,7 @@ from gui.components.add_to_list import AddToListComponent
 
 
 
-from core.common_types import Unit
+from core.common_types import Unit, QKDate
 from indicators.indicator_moving_average import MovingAverage
 from indicators.indicator_vwap import VWAP
 from indicators.indicator_day_range_percentage import DayRangePct
@@ -46,8 +46,8 @@ def build_main_view(on_run_callback):
             ParamSpec("mode", str, default="historical"),
             ParamSpec("interval", int, default=1),
             ParamSpec("intraday_interval", int, optional=True),
-            ParamSpec("from_date", str),
-            ParamSpec("to_date", str),
+            ParamSpec("from_date", str, default=QKDate.days_ago(50).__str__()),
+            ParamSpec("to_date", str, default=QKDate.days_ago(1).__str__()),
             ParamSpec("unit", Unit, default=Unit.days),
         ],
         title="Fetch Config",

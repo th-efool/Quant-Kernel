@@ -22,6 +22,7 @@ class StockChartComponent(UIComponent):
         self.df: pd.DataFrame | None = None
         self._canvas: FigureCanvasTkAgg | None = None
         self._ax = None
+        self._ax_secondary = None
 
     # ---------- BUILD ----------
 
@@ -68,8 +69,18 @@ class StockChartComponent(UIComponent):
             return
 
         ax_price = self._ax
+
+        # 🔥 CLEAR PRIMARY AXIS
         ax_price.clear()
+
+        # 🔥 REMOVE OLD SECONDARY AXIS COMPLETELY
+        if self._ax_secondary is not None:
+            self._ax_secondary.remove()
+            self._ax_secondary = None
+
+        # 🔥 CREATE FRESH SECONDARY AXIS
         ax_secondary = ax_price.twinx()
+        self._ax_secondary = ax_secondary
 
         df = self.df.copy()
 
@@ -144,8 +155,8 @@ class StockChartComponent(UIComponent):
 
         # ---------- INDICATOR OVERLAYS ----------
 
-        for col in df.columns:
-            series = df[col]
+        for col in self.df.columns:
+            series = self.df[col]
 
             if not self._is_indicator_column(col, series):
                 continue
@@ -157,7 +168,7 @@ class StockChartComponent(UIComponent):
             )
 
             target_ax.plot(
-                df["timestamp"],
+                self.df["timestamp"],
                 series,
                 label=col,
                 linewidth=1.2,

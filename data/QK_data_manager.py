@@ -1,4 +1,6 @@
 from typing import Iterable
+from datetime import datetime
+
 from core.common_types import QKApi, QKDate, Unit
 from data.historical_data.base.data_fetcher_base import DataFetcherBase
 from data.historical_data.fetcher_dhan import DhanFetcher
@@ -33,25 +35,33 @@ class QKHistoricalData:
     # ---------------- CONFIG ----------------
 
     def set_params(
-        self,
-        *,
-        api: QKApi | None = None,
-        from_date=None,
-        to_date=None,
-        interval: str | None = None,
-        unit: Unit | None = None,
-        intraday_interval: int | None = None,
-        exchange: str | None = None,
+            self,
+            *,
+            api: QKApi | None = None,
+            from_date=None,
+            to_date=None,
+            interval: str | None = None,
+            unit: Unit | None = None,
+            intraday_interval: int | None = None,
+            exchange: str | None = None,
     ):
         if api is not None:
             self.api = api
             self.switch_api(api)
 
         if from_date is not None:
-            self.from_date = from_date
+            self.from_date = (
+                from_date
+                if isinstance(from_date, QKDate)
+                else QKDate(from_date)
+            )
 
         if to_date is not None:
-            self.to_date = to_date
+            self.to_date = (
+                to_date
+                if isinstance(to_date, QKDate)
+                else QKDate(to_date)
+            )
 
         if interval is not None:
             self.interval = interval
@@ -66,7 +76,6 @@ class QKHistoricalData:
             self.exchange = exchange
 
         return self
-
 
     # ---------------- API SWITCH ----------------
 

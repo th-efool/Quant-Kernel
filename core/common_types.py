@@ -19,19 +19,26 @@ class TickerSource(Enum):
     # US = "data/APIs/ticker_symbols/us.yaml"
     # CRYPTO = "data/APIs/ticker_symbols/crypto.yaml"
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 
 class QKDate:
     def __init__(self, value: str):
-        datetime.strptime(value, "%Y-%m-%d")
-        self._value = value
+        self._dt = datetime.strptime(value, "%Y-%m-%d")
 
     def __str__(self):
-        return self._value
+        return self._dt.strftime("%Y-%m-%d")
 
     def value(self) -> str:
-        return self._value
+        return self._dt.strftime("%Y-%m-%d")
+
+    # 🔥 THIS IS WHAT UPSTOX NEEDS
+    def date(self) -> date:
+        return self._dt.date()
+
+    # optional but useful
+    def to_datetime(self) -> datetime:
+        return self._dt
 
     @classmethod
     def today(cls):
@@ -44,6 +51,7 @@ class QKDate:
     @classmethod
     def days_ago(cls, days: int):
         return cls((datetime.today() - timedelta(days=days)).strftime("%Y-%m-%d"))
+
 
 
 class QKCandle:
