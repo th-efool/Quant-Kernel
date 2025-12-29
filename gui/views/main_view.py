@@ -47,6 +47,10 @@ def build_main_view(on_run_callback):
             ParamSpec("exchange", str, default="NSE"),
             ParamSpec("start_index", int, default=0),
             ParamSpec("end_index", int, default=10),
+
+            ParamSpec("enable_filter", bool, default=False),
+            ParamSpec("filter_last_n", int, default=5, optional=True),
+
         ],
         title="API Selection",
     )
