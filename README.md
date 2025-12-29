@@ -8,8 +8,7 @@ An GUI python-based, algo trading & indicator signal scanning & capturing applic
 
 A **modular quantitative research kernel** focused on **clarity, composability, and correctness**.
 
-Quant-Kernel is *not* a monolithic trading bot.
-It is a **clean execution graph**:
+**clean execution graph**:
 
 ```
 Market Data → Indicators → Strategies → Signals → (Renderer / Backtests / Execution)
