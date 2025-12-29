@@ -14,7 +14,7 @@ def main():
     strategy_mgr = StrategyManager()
     controller = AppController(data_mgr, strategy_mgr)
 
-    renderer = QKRenderer(title="Quant Kernel", size=(1600, 600))
+    renderer = QKRenderer(title="Quant Kernel", size=(1800, 600))
 
     layout, ui_refs = build_main_view(
         on_run_callback=lambda: run_pipeline_action(controller, ui_refs)

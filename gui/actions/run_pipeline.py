@@ -1,13 +1,18 @@
 # gui/actions/run_pipeline.py
+# gui/actions/run_pipeline.py
+
+import threading
 from core.common_types import TickerSource
 from data.ticker_symbols.ticker_loader import TickerLoader
 
 
 def run_pipeline_action(controller, ui_refs):
     """
-    Reads UI state, executes pipeline, updates chart.
+    Reads UI state, executes pipeline incrementally,
+    updates chart without blocking Tkinter.
     """
 
+    # ---------- READ UI STATE ----------
     api_info = ui_refs["api_config"].get_value()
     if not api_info:
         print("No API selected")
@@ -19,13 +24,11 @@ def run_pipeline_action(controller, ui_refs):
 
     api = api_info["api"]
     exchange = api_info["exchange"]
-    max_tickers = api_info["max_tickers"]
-
-    # ---------- RESOLVE TICKERS ----------
-    loader = TickerLoader(TickerSource.INDIA)
     start = api_info["start_index"]
     end = api_info["end_index"]
 
+    # ---------- RESOLVE TICKERS ----------
+    loader = TickerLoader(TickerSource.INDIA)
     tickers = loader.get_tickers(
         api=api,
         exchange=exchange,
@@ -38,21 +41,36 @@ def run_pipeline_action(controller, ui_refs):
         return
 
     chart_view = ui_refs["chart"]
-    # 🔥 CLEAR ALL OLD CHARTS
+
+    # 🔥 Clear previous charts (logical reset, not destruction)
     chart_view.clear()
 
-    # ---------- RUN PER TICKER ----------
-    for ticker in tickers:
-        df = controller.run_pipeline(
-            api=api,
-            ticker=ticker,
-            fetch_config=fetch_config,
-            indicators=indicators,
-            strategies=strategies,
-        )
+    # ---------- BACKGROUND WORKER ----------
+    def worker():
+        for ticker in tickers:
+            try:
+                df = controller.run_pipeline(
+                    api=api,
+                    ticker=ticker,
+                    fetch_config=fetch_config,
+                    indicators=indicators,
+                    strategies=strategies,
+                )
 
-        chart_view.append_data(
-            ticker=ticker,
-            df=df,
-        )
+                # 🔁 Marshal UI update to main thread
+                chart_view.widget.after(
+                    0,
+                    lambda t=ticker, d=df: chart_view.append_data(
+                        ticker=t,
+                        df=d,
+                    )
+                )
 
+            except Exception as e:
+                print(f"[ERROR] Failed for {ticker}: {e}")
+
+    # ---------- START THREAD ----------
+    threading.Thread(
+        target=worker,
+        daemon=True,
+    ).start()
