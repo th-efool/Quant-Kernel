@@ -14,7 +14,7 @@ class Unit(Enum):
     years = 'y'
 
 class TickerSource(Enum):
-    INDIA = "D:/PycharmProjects/quant-kernel/data/APIs/ticker_symbols/india.yaml"
+    INDIA = "D:/PycharmProjects/quant-kernel/data/ticker_symbols/india.yaml"
     # FUTURE:
     # US = "data/APIs/ticker_symbols/us.yaml"
     # CRYPTO = "data/APIs/ticker_symbols/crypto.yaml"

@@ -20,10 +20,10 @@ class MACrossoverStrategy(StrategyBase):
         ]
 
     def compute(self, df):
-        signal = pd.Series(0, index=df.index)
+        signal = pd.Series(Signal.HOLD, index=df.index)
         f, sl = df[self.fast], df[self.slow]
 
-        signal[(f > sl) & (f.shift(1) <= sl.shift(1))] = 1
-        signal[(f < sl) & (f.shift(1) >= sl.shift(1))] = -1
+        signal[(f > sl) & (f.shift(1) <= sl.shift(1))] = Signal.BUY
+        signal[(f < sl) & (f.shift(1) >= sl.shift(1))] = Signal.SELL
         return signal
 

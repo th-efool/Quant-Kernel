@@ -2,6 +2,7 @@
 import pandas as pd
 from strategies.base.strategy_base import StrategyBase
 from indicators.QK_indicator_manager import IndicatorManager
+from strategies.strategy_day_range_breakout import DayRangeBreakoutStrategy
 from strategies.strategy_mcginley_breakout import McGinleyBreakoutStrategy
 
 
@@ -63,11 +64,7 @@ if __name__ == "__main__":
 
     strategy_mgr = StrategyManager()
     strategy_mgr.add(VWAPCrossoverStrategy(1, 7))
-    strategy_mgr.add(VWAPCrossoverStrategy(1, 7))
-    strategy_mgr.add(VWAPCrossoverStrategy(3, 7))
-    strategy_mgr.add(VWAPCrossoverStrategy(5, 7))
-    strategy_mgr.add(VWAPCrossoverStrategy(6, 7))
-    strategy_mgr.add(VWAPCrossoverStrategy(6, 7))
+    strategy_mgr.add(DayRangeBreakoutStrategy(0.05))
 
 
 

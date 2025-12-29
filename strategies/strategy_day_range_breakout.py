@@ -15,7 +15,7 @@ class DayRangeBreakoutStrategy(StrategyBase):
         return [DayRangePct()]
 
     def compute(self, df):
-        signal = pd.Series(0, index=df.index)
-        signal[df["day_range_pct"] >= self.threshold] = 1
+        signal = pd.Series(Signal.HOLD, index=df.index)
+        signal[df["day_range_pct"] >= self.threshold] = Signal.BUY
         return signal
 
