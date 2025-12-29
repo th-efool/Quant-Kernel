@@ -8,13 +8,11 @@ An GUI python-based, algo trading & indicator signal scanning & capturing applic
 
 A **modular quantitative research kernel** focused on **clarity, composability, and correctness**.
 
-Quant-Kernel is *not* a monolithic trading bot.
-It is a **clean execution graph**:
+**clean execution graph**:
 
 ```
 Market Data → Indicators → Strategies → Signals → (Renderer / Backtests / Execution)
 ```
-
 Each layer is isolated, deterministic, and replaceable.
 
 ---
@@ -23,13 +21,10 @@ Each layer is isolated, deterministic, and replaceable.
 
 * **Separation of concerns**
   Data fetching, indicator computation, strategy logic, and rendering never bleed into each other.
-
 * **Deterministic pipelines**
   Every stage consumes a DataFrame and returns a DataFrame or Series — no hidden state.
-
 * **Configuration through composition, not flags**
   You add indicators and strategies explicitly; duplicates are deduplicated structurally.
-
 * **Mechanics > magic**
   No “black box” frameworks. Everything is inspectable and override-friendly.
 
