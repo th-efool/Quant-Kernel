@@ -170,37 +170,84 @@ No plotting. No execution. Just signals.
 
 ---
 
-## Renderer (NOTE FOR LATER)
+## Renderer
+Quant-Kernel includes a **modular, component-driven Tkinter renderer** designed to visualize strategy outputs without polluting the execution pipeline.
 
-⚠️ **Intentionally deferred**
+The GUI layer is **presentation-only**: it never fetches data, computes indicators, or generates signals.
 
-**Design decision (important):**
+### Key Properties
+* **Component-based UI**
+  Every visible element (inputs, selectors, charts) is an isolated `UIComponent` with a strict build/value contract.
+* **Declarative configuration**
+  Indicators, strategies, and fetch parameters are configured via composable UI blocks — no hardcoded forms.
+* **Multi-ticker rendering**
+  Each ticker renders into its own chart component, stacked vertically inside a scrollable view.
+* **Incremental, non-blocking execution**
+  Data fetching and strategy execution run in background threads; charts are appended progressively to avoid UI freezes.
+* **Strict separation**
+  ```
+  UI → Controller → Data/Strategies → DataFrame → Renderer
+  ```
+  The renderer only consumes final DataFrames.
 
-> `QKRenderer` will NOT draw everything itself.
-
-Instead:
-
-* Individual visual elements (price chart, MA overlay, signal markers, volume pane, etc.)
-  will live in **separate component files**
-* `QKRenderer` will only:
-
-  * accept a DataFrame
-  * compose components
-  * orient/layout them
-
-Think **UI layout engine**, not plotting logic.
-
-Planned structure:
-
+---
+### GUI Architecture (Simplified)
 ```
 gui/
  ├─ components/
- │   ├─ price.py
- │   ├─ moving_average.py
- │   ├─ signals.py
- │   └─ volume.py
- ├─ QKRenderer.py   # orchestrates components only
+ │   ├─ base_ui_component.py     # UI contract
+ │   ├─ param_input.py           # Typed input forms
+ │   ├─ select_and_configure.py  # Class + params selection
+ │   ├─ add_to_list.py           # Multi-instance aggregation
+ │   ├─ stock_chart.py           # Single-ticker chart
+ │   └─ market_chart_view.py     # Scrollable multi-chart container
+ │
+ ├─ layout/
+ │   ├─ row.py / column.py       # Layout composition
+ │   └─ panel.py                 # Size-constrained containers
+ │
+ ├─ views/
+ │   └─ main_view.py             # Pure UI composition
+ │
+ └─ QKRenderer.py                # Tk bootstrap + layout build
 ```
+
+---
+
+### Renderer Responsibilities
+The renderer **does not**:
+* decide what to fetch
+* decide what to compute
+* interpret signals
+
+It **only**:
+* lays out UI components
+* renders charts from DataFrames
+* manages scrolling, redraws, and lifecycle
+
+Each ticker → one chart → one figure
+No shared state, no multiplexed axes.
+
+---
+
+### Execution Flow (GUI Mode)
+```
+User Input
+   ↓
+Controller.run_pipeline(ticker)
+   ↓
+DataFrame (OHLC + indicators + signals)
+   ↓
+MarketChartView.append_data()
+   ↓
+StockChartComponent.render()
+```
+
+Charts are **filtered, skipped, or appended** before rendering when signal filters are enabled, conserving resources.
+
+---
+
+This keeps the GUI **predictable, debuggable, and replaceable**, while remaining lightweight enough to evolve into backtesting, batch scanning, or headless modes later.
 
 This prevents renderer bloat and keeps visuals modular.
 
