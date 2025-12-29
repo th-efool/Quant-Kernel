@@ -29,6 +29,10 @@ Each layer is isolated, deterministic, and replaceable.
 * **Mechanics > magic**
   No “black box” frameworks. Everything is inspectable and override-friendly.
 
+To run the application:
+1. Clone the repository
+2. Install the dependencies
+3. run app/app.py
 ---
 
 ## High-Level Architecture
