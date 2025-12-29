@@ -169,7 +169,6 @@ def run_pipeline():
         df = TheDataManager.fetch_historical(ticker)
 
     print("DF SHAPE:", df.shape)
-    chart.set_data(df)
 
     # ---------------- STRATEGY (OPTIONAL) ----------------
 
@@ -178,6 +177,10 @@ def run_pipeline():
 
     if strategy:
         TheStrategyManager.add(strategy)
+    TheStrategyManager._indicator_manager.run(df)
+    TheStrategyManager.run(df)
+
+    chart.set_data(df)
 
     # Just proving the pipeline works
     print("PIPELINE OK")

@@ -18,11 +18,19 @@ class VWAPCrossoverStrategy(StrategyBase):
         ]
 
     def compute(self, df):
-        f = df[f"vwap_{self.fast}d"]
-        s = df[f"vwap_{self.slow}d"]
-
         signal = pd.Series(Signal.HOLD, index=df.index)
+
+        fast_col = f"vwap_{self.fast}d"
+        slow_col = f"vwap_{self.slow}d"
+
+        if fast_col not in df or slow_col not in df:
+            return signal
+
+        f = df[fast_col]
+        s = df[slow_col]
+
         signal[(f > s) & (f.shift(1) <= s.shift(1))] = Signal.BUY
         signal[(f < s) & (f.shift(1) >= s.shift(1))] = Signal.SELL
         return signal
+
 
