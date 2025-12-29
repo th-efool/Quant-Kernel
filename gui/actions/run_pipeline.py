@@ -1,5 +1,4 @@
 # gui/actions/run_pipeline.py
-# gui/actions/run_pipeline.py
 
 import threading
 from core.common_types import TickerSource
@@ -47,18 +46,19 @@ def run_pipeline_action(controller, ui_refs):
             last_n: int
     ) -> bool:
         """
-        Returns True if, in the last `n` candles,
-        ALL strategy signal columns contain ONLY BUY or HOLD.
+        Show ticker IF in last `n` candles:
+        - At least one BUY or SELL exists
+        Hide ONLY if everything is HOLD.
         """
         if last_n <= 0:
             return True
 
         tail = df.tail(last_n)
-
+        print(tail)
         for col in df.columns:
             series = df[col]
 
-            # signal columns only
+            # Only strategy signal columns
             if series.dtype != object:
                 continue
 
@@ -67,11 +67,12 @@ def run_pipeline_action(controller, ui_refs):
 
             values = tail[col].dropna().unique()
 
-            # ❌ reject if ANY SELL appears
-            if Signal.HOLD in values:
-                return False
+            # ✅ Any actionable signal → show ticker
+            if Signal.BUY in values or Signal.SELL in values:
+                return True
 
-        return True
+        # ❌ No BUY or SELL anywhere → HOLD-only → skip
+        return False
 
     if not tickers:
         print("No tickers resolved")
