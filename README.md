@@ -7,7 +7,7 @@ An GUI python-based, algo trading & indicator signal scanning & capturing applic
 ![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)
 
 A **modular quantitative research kernel** focused on **clarity, composability, and correctness**.
-![[https://github.com/th-efool/Quant-Kernel/blob/main/docs/screenshot20251229195242.png?raw=true]]
+![Quant Kernel Screenshot](https://raw.githubusercontent.com/th-efool/Quant-Kernel/main/docs/screenshot20251229195242.png)
 
 **clean execution graph**:
 
