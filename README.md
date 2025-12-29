@@ -9,8 +9,11 @@ An GUI python-based, algo trading & indicator signal scanning & capturing applic
 A **modular quantitative research kernel** focused on **clarity, composability, and correctness**.
 ![Quant Kernel Screenshot](https://raw.githubusercontent.com/th-efool/Quant-Kernel/main/docs/screenshot20251229195242.png)
 
+#### To run the application:
+1. Clone the repository
+2. Install the dependencies
+3. run app/app.py
 **clean execution graph**:
-
 ```
 Market Data → Indicators → Strategies → Signals → (Renderer / Backtests / Execution)
 ```
@@ -29,10 +32,7 @@ Each layer is isolated, deterministic, and replaceable.
 * **Mechanics > magic**
   No “black box” frameworks. Everything is inspectable and override-friendly.
 
-To run the application:
-1. Clone the repository
-2. Install the dependencies
-3. run app/app.py
+
 ---
 
 ## High-Level Architecture
