@@ -9,6 +9,7 @@ The UI is divided into **four logical regions**:
 [ API Selection ]   [ Fetch Config ]   [ Run ]
 [ Indicators ]      [ Strategies ]     [ Charts ]
 ```
+![Quant Kernel Screenshot](https://raw.githubusercontent.com/th-efool/Quant-Kernel/main/docs/screenshot20251229195242.png)
 
 ---
 
