@@ -11,14 +11,20 @@ def run_pipeline_action(controller, ui_refs):
         return
 
     fetch_config = ui_refs["fetch_config"].get_value()
-    indicator = ui_refs["indicator_selector"].get_value()
-    strategy = ui_refs["strategy_selector"].get_value()
+    indicators = ui_refs["indicators"].get_value()
+    strategies = ui_refs["strategies"].get_value()
+
+    for ind in indicators:
+        controller.strategy_manager._indicator_manager.add(ind)
+
+    for strat in strategies:
+        controller.strategy_manager.add(strat)
 
     df = controller.run_pipeline(
         api_info=api_info,
         fetch_config=fetch_config,
-        indicator=indicator,
-        strategy=strategy,
+        indicators=indicators,
+        strategies=strategies,
     )
 
     ui_refs["chart"].set_data(df)

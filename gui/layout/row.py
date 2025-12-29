@@ -10,13 +10,21 @@ class Row(LayoutContainer):
 
     def build(self, parent: tk.Widget):
         frame = tk.Frame(parent)
-        frame.pack(fill="x")
+        self.widget = frame  # 🔥 THIS LINE FIXES EVERYTHING
+        frame.pack(fill="both", expand=True)
 
         for child in self.children:
-            child.build(frame)
-            child.widget.pack(
-                side="left",
-                padx=self.spacing
-            )
+            if hasattr(child, "build"):
+                child.build(frame)
+
+            widget = getattr(child, "widget", None)
+            if widget:
+                widget.pack(
+                    side="top",
+                    fill="x",
+                    pady=self.spacing
+                )
 
         return frame
+
+

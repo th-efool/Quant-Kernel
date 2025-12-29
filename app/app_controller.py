@@ -20,12 +20,12 @@ class AppController:
         self.strategy_manager = strategy_manager
 
     def run_pipeline(
-        self,
-        *,
-        api_info: dict,
-        fetch_config: dict,
-        indicator,
-        strategy,
+            self,
+            *,
+            api_info,
+            fetch_config,
+            indicators,
+            strategies
     ):
         # ---------- APPLY FETCH CONFIG ----------
         self.data_manager.set_params(
@@ -46,12 +46,11 @@ class AppController:
             df = self.data_manager.fetch_historical(api_info["ticker"])
 
         # ---------- INDICATORS ----------
-        if indicator:
-            self.strategy_manager._indicator_manager.add(indicator)
+        for ind in indicators:
+            self.strategy_manager._indicator_manager.add(ind)
 
-        # ---------- STRATEGIES ----------
-        if strategy:
-            self.strategy_manager.add(strategy)
+        for strat in strategies:
+            self.strategy_manager.add(strat)
 
         # ---------- EXECUTION ----------
         df = self.strategy_manager.run(df)

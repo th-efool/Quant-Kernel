@@ -1,25 +1,25 @@
 # gui/views/main_view.py
 
 import tkinter as tk
-
+from gui.layout.row import Row
 from gui.layout.column import Column
 from gui.components.api_selector import ApiTickerSelector
 from gui.components.stock_chart import StockChartComponent
 from gui.components.select_and_configure import SelectAndConfigure
 from gui.components.param_spec import ParamSpec
+from gui.components.param_input import ParamInputComponent
+from gui.components.add_to_list import AddToListComponent
 
+
+
+from core.common_types import Unit
 from indicators.indicator_moving_average import MovingAverage
 from indicators.indicator_vwap import VWAP
 from indicators.indicator_day_range_percentage import DayRangePct
 from indicators.indicator_mcginley import McGinleyDynamic
-
 from strategies.strategy_ma_crossover import MACrossoverStrategy
 from strategies.strategy_vwap_crossover import VWAPCrossoverStrategy
 from strategies.strategy_day_range_breakout import DayRangeBreakoutStrategy
-
-from core.common_types import Unit
-from gui.components.param_input import ParamInputComponent
-
 
 class RunButton:
     def __init__(self, on_click):
@@ -53,8 +53,8 @@ def build_main_view(on_run_callback):
         title="Fetch Config",
     )
 
-    indicator_selector = SelectAndConfigure(
-        title="Add Indicator",
+    indicator_selector_raw = SelectAndConfigure(
+        title="Indicator Config",
         registry={
             "Moving Average": (
                 MovingAverage,
@@ -79,8 +79,13 @@ def build_main_view(on_run_callback):
         },
     )
 
-    strategy_selector = SelectAndConfigure(
-        title="Add Strategy",
+    indicator_list = AddToListComponent(
+        selector=indicator_selector_raw,
+        title="Indicators",
+    )
+
+    strategy_selector_raw = SelectAndConfigure(
+        title="Strategy Config",
         registry={
             "MA Crossover": (
                 MACrossoverStrategy,
@@ -105,22 +110,41 @@ def build_main_view(on_run_callback):
         },
     )
 
+    strategy_list = AddToListComponent(
+        selector=strategy_selector_raw,
+        title="Strategies",
+    )
+
+
     chart = StockChartComponent(title="Market Chart")
     run_button = RunButton(on_run_callback)
 
-    layout = Column(spacing=12)
-    layout.add(api_selector)
-    layout.add(fetch_config)
-    layout.add(indicator_selector)
-    layout.add(strategy_selector)
-    layout.add(run_button)
+    # ---------- TOP LEFT (API + Fetch) ----------
+    top_left = Column(spacing=12)
+    top_left.add(api_selector)
+    top_left.add(fetch_config)
+    top_left.add(run_button)
+
+    # ---------- TOP RIGHT (Indicators + Strategies) ----------
+    top_right = Column(spacing=12)
+    top_right.add(indicator_list)
+    top_right.add(strategy_list)
+
+    # ---------- TOP ROW ----------
+    top_row = Row(spacing=16)
+    top_row.add(top_left)
+    top_row.add(top_right)
+
+    # ---------- ROOT LAYOUT ----------
+    layout = Column(spacing=16)
+    layout.add(top_row)
     layout.add(chart)
 
     ui_refs = {
         "api_selector": api_selector,
         "fetch_config": fetch_config,
-        "indicator_selector": indicator_selector,
-        "strategy_selector": strategy_selector,
+        "indicators": indicator_list,
+        "strategies": strategy_list,
         "chart": chart,
     }
 

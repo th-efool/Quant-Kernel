@@ -10,7 +10,8 @@ class Column(LayoutContainer):
 
     def build(self, parent: tk.Widget):
         frame = tk.Frame(parent)
-        frame.pack(fill="both", expand=True)
+        self.widget = frame  # 🔥 consistency
+        frame.pack(fill="x", expand=True)
 
         for child in self.children:
             if hasattr(child, "build"):
@@ -19,9 +20,11 @@ class Column(LayoutContainer):
             widget = getattr(child, "widget", None)
             if widget:
                 widget.pack(
-                    side="top",
-                    fill="x",
-                    pady=self.spacing
+                    side="left",
+                    padx=self.spacing,
+                    fill="both",
+                    expand=True
                 )
 
         return frame
+

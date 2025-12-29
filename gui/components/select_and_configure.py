@@ -1,87 +1,84 @@
 import tkinter as tk
-from typing import Callable
-
 from gui.components.base.base_ui_component import UIComponent
 from gui.components.param_input import ParamInputComponent
-from gui.components.param_spec import ParamSpec
 
 
 class SelectAndConfigure(UIComponent):
     """
-    Generic dropdown + param form switcher.
+    Dropdown selector + parameter form builder.
+    Emits change events when selection changes.
     """
 
-    def __init__(
-        self,
-        title: str,
-        registry: dict[str, tuple[Callable, list[ParamSpec]]],
-    ):
+    def __init__(self, title: str, registry: dict):
         super().__init__()
         self.title = title
-        self.registry = registry
+        self.registry = registry  # name -> (cls, [ParamSpec])
 
-        self._selected_name = tk.StringVar()
-        self._param_components: dict[str, ParamInputComponent] = {}
-        self._active_form: ParamInputComponent | None = None
+        self._active_cls = None
+        self._active_form = None
+
+        # 🔥 REQUIRED for AddToListComponent
+        self._on_change_callbacks = []
+
+        self._var = None
+        self._form_container = None
+
+    # ---------- PUBLIC API ----------
+
+    def has_selection(self) -> bool:
+        return self._active_cls is not None
+
+    def on_change(self, callback):
+        self._on_change_callbacks.append(callback)
+
+    def get_value(self):
+        if self._active_cls is None or self._active_form is None:
+            return None
+
+        params = self._active_form.get_value()
+        return self._active_cls(**params)
 
     # ---------- BUILD ----------
 
-    def build(self, parent: tk.Widget):
+    def build(self, parent):
         frame = tk.LabelFrame(parent, text=self.title)
         self.widget = frame
 
-        # ---- Dropdown ----
-        top = tk.Frame(frame)
-        top.pack(fill="x", pady=4)
-
         options = list(self.registry.keys())
-        self._selected_name.set(options[0])
+
+        self._var = tk.StringVar(value="Select…")
 
         dropdown = tk.OptionMenu(
-            top,
-            self._selected_name,
+            frame,
+            self._var,
             *options,
-            command=self._on_select,
+            command=self._on_select,   # 🔥 THIS IS THE DROPDOWN
         )
-        dropdown.pack(fill="x", expand=True)
-
-        # ---- Param Forms ----
-        for name, (_, specs) in self.registry.items():
-            form = ParamInputComponent(specs, title=name)
-            self._param_components[name] = form
+        dropdown.pack(fill="x", pady=4)
 
         self._form_container = tk.Frame(frame)
         self._form_container.pack(fill="x")
 
-        # Build + show first
-        self._show_form(options[0])
-
         return frame
 
-    # ---------- EVENTS ----------
+    # ---------- INTERNAL ----------
 
-    def _on_select(self, name: str):
-        self._show_form(name)
+    def _on_select(self, choice: str):
+        # clear old form
+        for child in self._form_container.winfo_children():
+            child.destroy()
 
-    def _show_form(self, name: str):
-        if self._active_form:
-            self._active_form.widget.pack_forget()
+        cls, specs = self.registry[choice]
+        self._active_cls = cls
 
-        form = self._param_components[name]
-        if not form.widget:
-            form.build(self._form_container)
+        self._active_form = ParamInputComponent(
+            specs=specs,
+            title=f"{choice} Params",
+        )
+        # 🔥 THIS WAS MISSING
+        form_widget = self._active_form.build(self._form_container)
+        form_widget.pack(fill="x", pady=4)
 
-        form.widget.pack(fill="x")
-        self._active_form = form
-
-    # ---------- DATA ----------
-
-    def get_value(self):
-        if not self._active_form:
-            return None
-
-        name = self._selected_name.get()
-        ctor, _ = self.registry[name]
-
-        params = self._active_form.get_value()
-        return ctor(**params)
+        # 🔥 NOTIFY LISTENERS (THIS WAS MISSING)
+        for cb in self._on_change_callbacks:
+            cb()
