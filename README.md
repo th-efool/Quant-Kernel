@@ -1,37 +1,35 @@
 # Quant Kernel
-An GUI python-based, algo trading & indicator signal scanning & capturing application
+
+A GUI-based, Python quantitative research kernel for **indicator computation, strategy signal generation, and multi-ticker visualization**.
+
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)
 ![Pandas](https://img.shields.io/badge/pandas-required-brightgreen.svg)
 ![Status](https://img.shields.io/badge/status-active%20development-yellow.svg)
 ![Architecture](https://img.shields.io/badge/architecture-modular-informational.svg)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)
 
-A **modular quantitative research kernel** focused on **clarity, composability, and correctness**.
-![Quant Kernel Screenshot](https://raw.githubusercontent.com/th-efool/Quant-Kernel/main/docs/screenshot20251229195242.png)
+Quant-Kernel is built around **explicit pipelines**, **deterministic execution**, and a **strict separation between computation and rendering**.
 
-#### To run the application:
-1. Clone the repository
-2. Install the dependencies
-3. run app/app.py
-**clean execution graph**:
-```
-Market Data → Indicators → Strategies → Signals → (Renderer / Backtests / Execution)
-```
-Each layer is isolated, deterministic, and replaceable.
+![Quant Kernel Screenshot](https://raw.githubusercontent.com/th-efool/Quant-Kernel/main/docs/screenshot20251229195242.png)
 
 ---
 
-## Design Philosophy
+## Running the Application
 
-* **Separation of concerns**
-  Data fetching, indicator computation, strategy logic, and rendering never bleed into each other.
-* **Deterministic pipelines**
-  Every stage consumes a DataFrame and returns a DataFrame or Series — no hidden state.
-* **Configuration through composition, not flags**
-  You add indicators and strategies explicitly; duplicates are deduplicated structurally.
-* **Mechanics > magic**
-  No “black box” frameworks. Everything is inspectable and override-friendly.
+```bash
+git clone https://github.com/th-efool/Quant-Kernel
+cd Quant-Kernel
+pip install -r requirements.txt
+python app/app.py
+```
 
+Execution flow:
+
+```
+Market Data → Indicators → Strategies → Signals → Renderer
+```
+
+Each stage is isolated and replaceable.
 
 ---
 
@@ -39,21 +37,28 @@ Each layer is isolated, deterministic, and replaceable.
 
 ```
 data/
- ├─ QKHistoricalData        # Data orchestration (API + tickers)
- ├─ fetchers/               # Yahoo / Upstox / Dhan implementations
+ ├─ QKHistoricalData          # API + ticker orchestration
+ ├─ historical_data/
+ │   ├─ fetcher_yfinance.py
+ │   ├─ fetcher_upstox.py
+ │   └─ fetcher_dhan.py
 
 indicators/
- ├─ IndicatorBase           # Pure feature generators
- ├─ IndicatorManager        # Deduplicates & runs indicators
+ ├─ IndicatorBase             # Pure feature generators
+ ├─ IndicatorManager          # Deduplication + execution
 
 strategies/
- ├─ StrategyBase            # Signal contracts
- ├─ StrategyManager         # Orchestrates strategies
+ ├─ StrategyBase              # Signal contracts
+ ├─ StrategyManager           # Strategy orchestration
 
 gui/
- ├─ QKRenderer              # (planned) presentation-only layer
+ ├─ components/               # UI building blocks
+ ├─ layout/                   # Row / Column layout engine
+ ├─ views/                    # Screen composition
+ └─ QKRenderer.py             # Tk bootstrap + render loop
 
-engine.py                   # Glue: data → strategies → renderer
+engine/
+ └─ app_controller.py         # Execution glue
 ```
 
 ---
@@ -62,19 +67,20 @@ engine.py                   # Glue: data → strategies → renderer
 
 ### 1. Data Layer (`QKHistoricalData`)
 
+Responsible only for **market data acquisition**.
+
 Handles:
 
 * API selection (`yfinance`, `upstox`, `dhan`)
-* Date ranges
-* Time units (days, minutes, etc.)
-* Ticker resolution
+* Date ranges and units
+* Ticker resolution (including batch ranges)
 
 ```python
 data = QKHistoricalData(api=QKApi.yfinance)
 df = data.fetch_historical("RELIANCE")
 ```
 
-This layer **never** knows about indicators or strategies.
+This layer **never** knows about indicators, strategies, or charts.
 
 ---
 
@@ -84,37 +90,37 @@ Indicators are **pure feature generators**.
 
 Rules:
 
-* Input: full DataFrame
-* Output: `dict[str, pd.Series]`
-* Series **must align with input index**
+* Input: full `DataFrame`
+* Output: aligned `pd.Series`
+* No side effects
 
 ```python
 class MovingAverage(IndicatorBase):
     def compute(self, df):
         return {
-            f"ma_{self.period}": df["close"].rolling(self.period).mean()
+            "ma_21": df["close"].rolling(21).mean()
         }
 ```
 
-Indicators do **not** know:
+Indicators do not:
 
-* which strategy uses them
-* how they are plotted
-* how signals are generated
+* generate signals
+* know about plotting
+* know about strategies
 
 ---
 
 ### 3. IndicatorManager
 
-Responsible for:
+Responsibilities:
 
-* Deduplicating indicators by configuration
-* Running them exactly once
-* Injecting outputs into the DataFrame
+* Deduplicate indicators by configuration
+* Execute each indicator exactly once
+* Inject outputs into the DataFrame
 
 ```python
 manager.add(MovingAverage(21))
-manager.add(MovingAverage(21))  # deduped
+manager.add(MovingAverage(21))  # deduplicated
 ```
 
 ---
@@ -123,14 +129,12 @@ manager.add(MovingAverage(21))  # deduped
 
 Strategies:
 
-* Declare **what indicators they need**
+* Declare required indicators
 * Convert indicators → signals
-* Never compute indicators directly
+* Output `Signal.BUY / SELL / HOLD`
 
 ```python
 class MACrossoverStrategy(StrategyBase):
-    signal_column = "ma_cross"
-
     def indicators(self):
         return [MovingAverage(7), MovingAverage(21)]
 
@@ -138,14 +142,7 @@ class MACrossoverStrategy(StrategyBase):
         ...
 ```
 
-Each strategy instance gets a unique `signal_column_id`:
-
-```
-ma_cross_1
-ma_cross_2
-```
-
-This allows **multiple parameterized instances** safely.
+Each strategy instance produces its **own signal column**, allowing multiple parameterized strategies safely.
 
 ---
 
@@ -161,80 +158,83 @@ Responsibilities:
 ```python
 strategy_mgr = StrategyManager()
 strategy_mgr.add(MACrossoverStrategy(7, 21))
-strategy_mgr.add(DayRangeBreakoutStrategy(0.05))
-
 df = strategy_mgr.run(df)
 ```
 
-No plotting. No execution. Just signals.
+No rendering. No execution. Only signal generation.
 
 ---
 
-## Renderer
-Quant-Kernel includes a **modular, component-driven Tkinter renderer** designed to visualize strategy outputs without polluting the execution pipeline.
+## GUI & Renderer
 
-The GUI layer is **presentation-only**: it never fetches data, computes indicators, or generates signals.
+Quant-Kernel includes a **modular, component-driven Tkinter renderer** focused purely on visualization.
 
-### Key Properties
-* **Component-based UI**
-  Every visible element (inputs, selectors, charts) is an isolated `UIComponent` with a strict build/value contract.
-* **Declarative configuration**
-  Indicators, strategies, and fetch parameters are configured via composable UI blocks — no hardcoded forms.
-* **Multi-ticker rendering**
-  Each ticker renders into its own chart component, stacked vertically inside a scrollable view.
-* **Incremental, non-blocking execution**
-  Data fetching and strategy execution run in background threads; charts are appended progressively to avoid UI freezes.
-* **Strict separation**
-  ```
-  UI → Controller → Data/Strategies → DataFrame → Renderer
-  ```
-  The renderer only consumes final DataFrames.
+The GUI layer:
+
+* never fetches data
+* never computes indicators
+* never generates signals
+
+It consumes **final DataFrames only**.
 
 ---
-### GUI Architecture (Simplified)
+
+### GUI Architecture (Actual)
+
 ```
 gui/
  ├─ components/
- │   ├─ base_ui_component.py     # UI contract
- │   ├─ param_input.py           # Typed input forms
- │   ├─ select_and_configure.py  # Class + params selection
+ │   ├─ base_ui_component.py     # UIComponent contract
+ │   ├─ param_input.py           # Typed parameter forms
+ │   ├─ select_and_configure.py  # Class + params selector
  │   ├─ add_to_list.py           # Multi-instance aggregation
  │   ├─ stock_chart.py           # Single-ticker chart
- │   └─ market_chart_view.py     # Scrollable multi-chart container
+ │   └─ market_chart_view.py     # Scrollable multi-chart view
  │
  ├─ layout/
- │   ├─ row.py / column.py       # Layout composition
+ │   ├─ row.py                   # Horizontal layout
+ │   ├─ column.py                # Vertical layout
  │   └─ panel.py                 # Size-constrained containers
  │
  ├─ views/
- │   └─ main_view.py             # Pure UI composition
+ │   └─ main_view.py              # UI composition only
  │
- └─ QKRenderer.py                # Tk bootstrap + layout build
+ └─ QKRenderer.py                 # Tk bootstrap + layout build
 ```
 
 ---
 
 ### Renderer Responsibilities
+
 The renderer **does not**:
+
 * decide what to fetch
 * decide what to compute
 * interpret signals
 
 It **only**:
-* lays out UI components
-* renders charts from DataFrames
-* manages scrolling, redraws, and lifecycle
 
-Each ticker → one chart → one figure
-No shared state, no multiplexed axes.
+* builds UI components
+* manages layout and scrolling
+* renders charts from DataFrames
+* appends charts incrementally
+
+Each ticker renders into:
+
+```
+one ticker → one chart → one matplotlib figure
+```
+
+No shared axes. No hidden state.
 
 ---
 
 ### Execution Flow (GUI Mode)
+
 ```
 User Input
    ↓
-Controller.run_pipeline(ticker)
+AppController.run_pipeline(ticker)
    ↓
 DataFrame (OHLC + indicators + signals)
    ↓
@@ -243,36 +243,47 @@ MarketChartView.append_data()
 StockChartComponent.render()
 ```
 
-Charts are **filtered, skipped, or appended** before rendering when signal filters are enabled, conserving resources.
+Charts can be:
+
+* skipped via signal filters
+* appended incrementally
+* rendered without blocking the UI thread
 
 ---
 
-This keeps the GUI **predictable, debuggable, and replaceable**, while remaining lightweight enough to evolve into backtesting, batch scanning, or headless modes later.
+## Engine Glue (`AppController`)
 
-This prevents renderer bloat and keeps visuals modular.
-
----
-
-## engine.py (Execution Glue)
+`AppController` is the only layer that touches **both** computation and rendering.
 
 ```python
-from data.QK_data_manager import QKHistoricalData
-from strategies.QK_strategy_manager import StrategyManager
-from gui.QKRenderer import QKRenderer
-
-TheDataManager = QKHistoricalData()
-TheStrategyManager = StrategyManager()
-Renderer = QKRenderer()
+data_manager = QKHistoricalData()
+strategy_manager = StrategyManager()
+controller = AppController(data_manager, strategy_manager)
 ```
 
+It:
 
-## Philosophy Summary
+* applies fetch configuration
+* switches APIs
+* runs indicator + strategy pipelines
+* returns final DataFrames to the renderer
 
-> Indicators describe **markets**
-> Strategies describe **beliefs**
-> Managers describe **execution**
-> Renderers describe **perception**
+---
 
-Quant-Kernel keeps those ideas separate — on purpose.
+## Summary
 
+* **Data** describes *markets*
+* **Indicators** describe *features*
+* **Strategies** describe *signals*
+* **Renderer** describes *presentation*
 
+Quant-Kernel keeps these layers **deliberately separate** to remain inspectable, extensible, and predictable.
+
+---
+
+If you want next:
+
+* a **short “Features” section**
+* or a **separate `docs/gui_architecture.md`**
+
+say the word.
