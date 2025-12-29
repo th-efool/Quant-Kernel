@@ -60,6 +60,77 @@ gui/
 engine/
  └─ app_controller.py         # Execution glue
 ```
+---
+
+## Features
+
+### Market Data
+
+* Multi-API support: **Yahoo Finance, Upstox, Dhan**
+* Configurable date ranges and time units
+* Batch ticker loading with **index-range selection** (e.g. 0–10, 11–20)
+* Deterministic, repeatable data fetches
+
+---
+
+### Indicators
+
+* Pure, side-effect-free indicator implementations
+* Indicators run **exactly once** per configuration
+* Structural deduplication via `IndicatorManager`
+* Multiple parameterized instances supported simultaneously
+
+---
+
+### Strategies & Signals
+
+* Explicit strategy contracts (`BUY / SELL / HOLD`)
+* Strategies declare required indicators (no hidden dependencies)
+* Multiple strategies can coexist without column collisions
+* Signal columns are uniquely namespaced per strategy instance
+
+---
+
+### Signal Filtering (GUI)
+
+* Optional **last-N candle signal filtering**
+* Render only tickers that emit **BUY or SELL** in the recent window
+* Skips non-qualifying tickers before rendering to save resources
+* Designed for large-scale scanning workflows
+
+---
+
+### GUI & Visualization
+
+* Component-driven Tkinter UI (no monolithic screens)
+* Typed parameter inputs with validation
+* Incremental, non-blocking rendering (background execution)
+* One chart per ticker, stacked vertically
+* Scrollable multi-ticker chart view
+* Indicator overlays and signal markers rendered per chart
+
+---
+
+### Architecture & Extensibility
+
+* Strict separation: **Data → Indicators → Strategies → Renderer**
+* Renderer consumes final DataFrames only
+* Layout engine (Row / Column / Panel) independent of components
+* Headless-friendly core (GUI is optional, not required)
+
+---
+
+### Developer-Friendly
+
+* No hidden global state
+* No framework magic
+* Everything inspectable, overrideable, and composable
+* Suitable for:
+
+  * research
+  * batch scanning
+  * backtesting (planned)
+  * execution adapters (future)
 
 ---
 
